@@ -1,0 +1,308 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+class GSM
+{
+    private string model;
+    private string manufacturer;
+    private double price = 0.37;
+    private string owner;
+    private char iPhone4S;
+    
+    
+    public GSM(string model, string manufacturer)
+    {
+        this.Model=model;
+        this.Manufacturer = manufacturer;
+        this.Price = 0;
+        this.Owner = null;
+    }
+    public GSM(string model, string manufacturer, double price, bool iPhone)
+    {
+        this.Model = model;
+        this.Manufacturer = manufacturer;
+        this.Price = price;
+        this.Owner = null;
+    }
+    public GSM(string model, string manufacturer, string owner, bool iPhone)
+    {
+        this.Model = model;
+        this.Manufacturer = manufacturer;
+        this.Price = 0;
+        this.Owner = owner;
+    }
+    public GSM(string model, string manufacturer, double price, string owner, bool iPhone)
+    {
+        this.Model = model;
+        this.Manufacturer = manufacturer;
+        this.Price = price;
+        this.Owner = owner;
+    }
+    public override string ToString()
+    {
+        return ("Model: " + this.model + "\n" + "Manufacturer: " + this.manufacturer + "\n" + "Price: " + this.price + "$" + "\n" + "Owner: " + this.owner + "\n" + "Is iPhone: " + this.IPhone + "\n");
+    }
+    public string Model
+    {
+        get { return this.model; }
+        set { this.model = value; }
+    }
+    public string Manufacturer
+    {
+        get { return this.manufacturer; }
+        set { this.manufacturer = value; }
+    }
+    public double Price
+    {
+        get { return this.price; }
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Price cannot be negative!");
+            }
+            else this.price = value; }
+    }
+    public string Owner
+    {
+        get { return this.owner; }
+        set { this.owner = value; }
+    }
+    public char IPhone
+    {
+        get { return this.iPhone4S; }
+        set { this.iPhone4S = value; }
+    }
+    public List<Call> CallHistory = new List<Call>();
+    public void AddCall (string phonenumber, double duration)
+    {
+        CallHistory.Add(new Call(phonenumber, duration));
+    }
+    public void RemoveCall(List<Call> AllCalls, string phonenumber, int duration)
+    {
+        if (AllCalls.Exists(element => element.Phonenumber == phonenumber))
+        {
+            
+        }
+    }
+    public void ClearCallHistory(List<Call> AllCalls)
+    {
+        AllCalls.Clear();
+    }
+    public double CalculatePrice(List<Call> AllCalls, double price = 0.37)
+    {
+        double sum = 0;
+        foreach (Call currentCall in AllCalls)
+        {
+            sum += currentCall.Duration * price;
+        }
+        return sum;
+    }
+}
+
+class Battery
+{
+    private string model;
+    private double hoursidle;
+    private double hourstalk;
+    private enum BatteryType {LiIon, NiMH, NiCd};
+    
+    public Battery(string model)
+    {
+        this.Model = model;
+        this.Hoursidle = 0;
+        this.Hourstalk = 0;
+    }
+    public Battery(string model, double hoursidle)
+    {
+        this.Model = model;
+        this.Hoursidle = hoursidle;
+        this.Hourstalk = 0;
+    }    
+    public Battery(string model, double hoursidle, double hourstalk)
+    {
+        this.Model = model;
+        this.Hoursidle = hoursidle;
+        this.Hourstalk = hourstalk;
+    }
+
+    public string Model
+    {
+        get { return this.model; }
+        set { this.model = value; }
+    }
+    public double Hoursidle
+    {
+        get { return this.hoursidle; }
+        set { this.hoursidle = value; }
+    }
+    public double Hourstalk
+    {
+        get { return this.hourstalk; }
+        set { this.hourstalk = value; }
+    }    
+}
+
+class Display
+{
+    private double size;
+    private int colors;
+
+    public Display()
+    {
+        this.Size = 0;
+        this.Colors = 0;
+    }
+    public Display(double size, int colors)
+    {
+        this.Size = size;
+        this.Colors = colors;
+    }
+
+    public double Size
+    {
+        get { return this.size; }
+        set { this.size = value; }
+    }
+    public int Colors
+    {
+        get { return this.colors; }
+        set
+        {
+            if (colors <= 0)
+            {
+                throw new ArgumentException("Colors cannot be 0 or negative!");
+            }
+            else this.colors = value;
+        }
+    }
+}
+
+class Call
+{
+    private int day;
+    private string time;
+    private string phonenumber;
+    private double duration;
+
+    public Call(string phonenumber, double duration)
+    {
+        this.day = DateTime.Now.Day;
+        this.time = DateTime.Now.ToShortTimeString();
+        this.Phonenumber = phonenumber;
+        this.Duration = duration;
+    }
+    public string Phonenumber
+    {
+        get { return this.phonenumber; }
+        set { this.phonenumber = value; }
+    }
+    public double Duration
+    {
+        get { return this.duration; }
+        set { this.duration = value; }
+    }
+    public override string ToString()
+    {
+        return ("Date: " + this.day + "\n" + "Time: " + this.time + "\n" + "Phone dialed: " + this.phonenumber + "\n" + "Duration: " + this.duration + "\n");
+    }
+}
+
+class GSMCallHistoryTest
+{    
+    static GSM GSMInput()
+    {        
+        Console.WriteLine("Enter model: ");
+        string model = Console.ReadLine();
+        Console.WriteLine("Enter manufacturer: ");
+        string manufacturer = Console.ReadLine();
+        GSM currentGSM = new GSM(model, manufacturer);
+        Console.WriteLine("Enter price or 0: ");
+        double price = double.Parse(Console.ReadLine());
+        Console.WriteLine("Enter owner or 0: ");
+        string owner = Console.ReadLine();
+        Console.WriteLine("Is it iPhone? Y/N: ");
+        currentGSM.IPhone = (Console.ReadLine() == "Y") ? 'Y' : 'N';
+        if (price != 0) 
+        {
+            currentGSM.Price = price;
+        }
+        if (owner != "0")
+        {
+            currentGSM.Owner = owner;
+        }       
+        return currentGSM;
+    }
+
+    static GSM[] GSMTest()
+    {
+        Console.WriteLine("How many GSMs u want to input? ");
+        int n = int.Parse(Console.ReadLine());
+        GSM[] GSMarr = new GSM[n];
+        for (int i = 0; i < n; i++)
+        {
+            GSMarr[i] = GSMInput();
+        }
+        for (int i = 0; i < n; i++)
+        {
+            Console.WriteLine(GSMarr[i]);
+        }
+        return GSMarr;
+    }
+
+    static List<Call> PerformCalls()
+    {
+        Console.WriteLine("How many calls do you wish to perform?");
+        int n = int.Parse(Console.ReadLine());
+        List<Call> Callarray = new List<Call>();
+        for (int i = 0; i < n; i++)
+        {
+            Console.WriteLine("Call number " + (i+1)); 
+            Console.WriteLine("To which phone number? ");
+            string phonenumber = Console.ReadLine();
+            Console.WriteLine("What duration? ");
+            double duration = double.Parse(Console.ReadLine());
+            Callarray.Add(new Call(phonenumber, duration));
+            Console.WriteLine();
+        }
+        for (int i = 0; i < n; i++)
+        {
+            Console.WriteLine(Callarray[i]);
+        }
+        return Callarray;
+    }
+
+    static List<Call> RemoveLongest(List<Call> calls)
+    {
+        double max = 0;
+        int index = 0;
+        for (int i = 0; i < calls.Count; i++)
+        {
+            if (calls[i].Duration > max)
+            {
+                max = calls[i].Duration;
+                index = i;
+            }
+        }
+        calls[index].Duration = 0;
+        return calls;
+    }
+
+    static void Main()
+    {
+        GSM[] GSMarray = GSMTest();
+        List<Call> Callarray = PerformCalls();
+        Console.WriteLine("Total price: " + GSMarray[0].CalculatePrice(Callarray));
+        Callarray = RemoveLongest(Callarray);
+        Console.WriteLine("Price without longest call: " + GSMarray[0].CalculatePrice(Callarray));
+        GSMarray[0].ClearCallHistory(Callarray);
+        Console.WriteLine();
+        for (int i = 0; i < Callarray.Count; i++)
+        {
+            Console.WriteLine(Callarray[i]);
+        }
+    }
+}
